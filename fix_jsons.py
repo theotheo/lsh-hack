@@ -11,7 +11,7 @@ fixed_dir = Path('data')
 for fn in original_dir.glob('*.json'):
     s = fn.read_text()
 
-    if 'tempNews' in fn: # fix tempNews
+    if 'tempNews' in str(fn): # fix tempNews
         s = s.replace('}{', '}, {')
         s = "[" + s + "]"
     
