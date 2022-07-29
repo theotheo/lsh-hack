@@ -8,34 +8,16 @@ original_dir = Path('original')
 fixed_dir = Path('data')
 
 # %%
-for fn in original_dir.glob('*tempNews*.json'):
+for fn in original_dir.glob('*.json'):
     s = fn.read_text()
-    s = s.replace('}{', '}, {')
-    s = "[" + s + "]"
+
+    if 'tempNews' in fn: # fix tempNews
+        s = s.replace('}{', '}, {')
+        s = "[" + s + "]"
+    
     news_list = json.loads(s)
 
-    jsons = []
-    for news in news_list:
-        jsons.append(json.dumps(news))
+    df = pd.DataFrame(news_list)
 
-    df = pd.DataFrame(jsons)
-
-    fixed_fn = (fixed_dir / fn.stem[-4:]).with_suffix('.jsonl')
-    df.to_csv(str(fixed_fn), index=False)
-
-
-
-# %%
-
-for fn in original_dir.glob('*ria*.json'):
-    s = fn.read_text()
-    news_list = json.loads(s)
-
-    jsons = []
-    for news in news_list:
-        jsons.append(json.dumps(news))
-
-    df = pd.DataFrame(jsons)
-
-    fixed_fn = (fixed_dir / fn.stem[-4:]).with_suffix('.jsonl')
+    fixed_fn = (fixed_dir / fn.stem[-4:]).with_suffix('.csv')
     df.to_csv(str(fixed_fn), index=False)
